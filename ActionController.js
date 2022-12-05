@@ -3,7 +3,6 @@ const ItemService = require("./ItemService.js")
 const { sortField } = require('./helper.js')
 
 class ActionController {
-
     async getAll(req, res) {
         try {
             const item = await ItemService.getAll()
@@ -33,6 +32,7 @@ class ActionController {
             res.status(500).json(e)
         }
     }
+
     async delete(req, res) {
         try {
             if(!req.body){
@@ -46,7 +46,6 @@ class ActionController {
             res.status(500).json(e)
         }
     }
-
 
     async sort(req, res) {
         try {
@@ -63,7 +62,6 @@ class ActionController {
         }
     }
 
-
     async filter(req, res) {
         try {
             if(!req.body){
@@ -77,6 +75,5 @@ class ActionController {
         }
     }
 }
-
 
 module.exports = new ActionController()

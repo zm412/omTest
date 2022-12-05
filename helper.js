@@ -1,4 +1,3 @@
- 
 function newViewItem(obj){
     const year = new Date(obj.year)
     const {brand, model, color, price, isClear, _id} = obj 
@@ -19,7 +18,6 @@ function sortField(arr, field, isReverse){
 
     if(['brand', 'model', 'color'].includes(field)){
         result = arr.sort((a, b) => {
-
             const stringA = a[field] ? a[field].toLowerCase() : ''
             const stringB = b[field]? b[field].toLowerCase() : ''
 
@@ -39,6 +37,7 @@ function sortField(arr, field, isReverse){
        result = arr.sort((a, b) => {
            const dateA = a[field] || 0
            const dateB = b[field] || 0
+
            return dateA - dateB
        })
    }
@@ -47,6 +46,7 @@ function sortField(arr, field, isReverse){
         result = arr.sort((a, b) => {
            const priceA = a[field] || 0
            const priceB = b[field] || 0
+
            return priceA - priceB 
        })
    }
@@ -87,7 +87,6 @@ function currentArguments(argsArr){
             body: JSON.stringify( newCarData ) ,
             headers: {'Content-Type': 'application/json'}
         }
-
     }
 }
 

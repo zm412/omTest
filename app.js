@@ -3,14 +3,13 @@ const mongoose = require("mongoose")
 const router = require("./router.js" )
 const dotenv = require("dotenv" )
 const fetch = require("node-fetch")
-const {newViewItem, currentArguments } = require('./helper.js')
+const { newViewItem, currentArguments } = require('./helper.js')
 
 const app = express()
 dotenv.config()
 app.use(express.json())
 app.use(express.static('static'))
 app.use('/', router)
-
 
 const argumentList = process.argv.slice(2)
 const action = process.argv[2]
