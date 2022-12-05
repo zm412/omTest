@@ -3,94 +3,32 @@ const Car = require("./Car.js")
 class ItemService {
 
     async create(itemObject) {
-        const createdItem = await Car.create(itemObject);
-        console.log(createdItem, 'item')
-        return createdItem;
+        return await Car.create(itemObject);
     }
 
     async getAll() {
-        const items = await Car.find();
-        return items;
+        return await Car.find();
     }
 
     async getOne(id) {
         if (!id) {
             throw new Error('не указан ID')
         }
-        const item = await Car.findById(id);
-
-        return item;
-    }
-
-    async update(post) {
-        if (!post._id) {
-            throw new Error('не указан ID')
-        }
-        const updatedItem = await Car.findByIdAndUpdate(post._id, post, {new: true})
-
-        return updatedItem;
+        
+        return Car.findById(id);
     }
 
     async delete(id) {
         if (!id) {
             throw new Error('не указан ID')
         }
-        const item = await Car.findByIdAndDelete(id)
 
-        return item
-    }
-
-    async sort(field, isReverse){
-        const items = await Car.find();
-        const sortedList = this.sortField(items, field, isReverse)
-        return sortedList
+        return await Car.findByIdAndDelete(id)
     }
 
     async filter(obj) {
-       const item = await Car.find(obj)
-
-        return item
+        return await Car.find(obj)
     }
-
-     sortField(arr, field, isReverse){
-        let result
-        if(['brand', 'model', 'color'].includes(field)){
-            result = arr.sort((a, b) => {
-                const stringA = a[field].toLowerCase()
-                const stringB = b[field].toLowerCase()
-                if(stringA < stringB){
-                    return -1
-                }
-                if(stringA > stringB){
-                    return 1
-                }
-
-                return 0
-            })
-            console.log(result, 'RESULT')
-        }
-
-        if(['year', 'registered'].includes(field)){
-            result = arr.sort((a, b) => {
-                const dateA = new Date(a[field]) 
-                const dateB = new Date(b[field])
-                return dateA - dateB
-            })
-        }
-        
-        if(field == 'price'){
-             result = arr.sort((a, b) => {
-                const priceA = a[field] 
-                const priceB = b[field]
-                return priceA - priceB 
-            })
-        }
-
-
-        return isReverse ? result.reverse() : result
-    }
-
 }
-
 
 module.exports = new ItemService()

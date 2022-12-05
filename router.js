@@ -1,13 +1,13 @@
 const { Router } = require("express")
+const ItemService = require("./ItemService.js")
+const router = new Router()
 const ActionController = require("./ActionController.js")
 
-const router = new Router()
-console.log(ActionController, 'CONTROLLER')
-
 router.get('/cars', ActionController.getAll)
-router.post('/cars', ActionController.create)
-router.get('/cars/:id', ActionController.getOne)
-router.put('/cars', ActionController.update)
-router.delete('/cars/:id', ActionController.delete)
+router.get('/oneCar', ActionController.getOne)
+router.get('/addCar', ActionController.create)
+router.get('/delete', ActionController.delete)
+router.get('/sort', ActionController.sort)
+router.get('/filter', ActionController.filter)
 
 module.exports = router;

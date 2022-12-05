@@ -1,51 +1,100 @@
 const Car = require("./Car.js")
 const ItemService = require("./ItemService.js")
+const {newViewItem, sortField } = require('./helper.js')
 
 class ActionController {
-    async create(req, res) {
+    getAll(req, res) {
         try {
-            if(!req.body){
-                return res.sendStatus(400)
-            } 
-            const item = await ItemService.create(req.body)
-            console.log(item, 'item')
-            res.json(item)
+            ItemService.getAll()
+               .then(doc => {
+                   doc.forEach(( car, index ) => {
+                       console.log(newViewItem(car), "SHOWALL")
+                   })
+               })
+        } catch (e) {
+            console.log(e, 'ERROR')
+        }
+    }
+
+    getOne(req, res) {
+        try {
+            const id = process.argv.slice(3)[0]
+            ItemService.getOne(id)
+                .then(doc => console.log(newViewItem(doc), 'SHOWONE'))
+        } catch (e) {
+            console.log(e, 'ERROR')
+        }
+    }
+
+    create(req, res) {
+        try {
+            const currentArgs = process.argv.slice(3)
+            console.log(currentArgs, 'NLJKLj')
+            const newCarData = {}
+
+            currentArgs.forEach(param => {
+                const newParam = param.split('=')
+                const [key, value] = newParam
+                newCarData[key] = value
+            })
+            console.log(newCarData, 'newData')
+
+            ItemService.create(newCarData)
+                .then(doc => console.log(newViewItem(doc), 'ADD'))
+                .catch(err => console.log(err, 'ERROR'))
+
+        } catch (e) {
+            console.log(e, "ERROR")
+        }
+    }
+
+    delete(req, res) {
+        try {
+            const currentArgs = process.argv.slice(3)
+            currentArgs.forEach(id => {
+                ItemService.delete(id)
+                    .then(doc => console.log('REMOVED'))
+                    .catch(err => console.log(err, 'ERROR'))
+            })
         } catch (e) {
             res.status(500).json(e)
         }
     }
 
-    async getAll(req, res) {
+    sort(req, res) {
         try {
-            const item = await ItemService.getAll()
-            return res.json(item)
+            const currentArgs = process.argv.slice(3)
+            const [ field, isReverse ] = currentArgs
+
+            ItemService.getAll()
+               .then(doc => {
+                   const sortedList = sortField(doc, field, isReverse)
+                   sortedList.forEach(car => {
+                       console.log(newViewItem(car), "SORTED_LIST")
+                   })
+               })
+            
         } catch (e) {
             res.status(500).json(e)
         }
     }
 
-    async getOne(req, res) {
+    filter(req, res) {
         try {
-            const post = await ItemService.getOne(req.params.id)
-            return res.json(post)
-        } catch (e) {
-            res.status(500).json(e)
-        }
-    }
+            const newCarData = {}
+            const currentArgs = process.argv.slice(3)
+            currentArgs.forEach(param => {
+                const newParam = param.split('=')
+                const [key, value] = newParam
+                newCarData[key] = value
+            })
 
-    async update(req, res) {
-        try {
-            const updatedItem = await ItemService.update(req.body);
-            return res.json(updatedItem);
-        } catch (e) {
-            res.status(500).json(e.message)
-        }
-    }
-
-    async delete(req, res) {
-        try {
-            const post = await ItemService.create(req.params.id);
-            return res.json(post)
+            ItemService.filter(newCarData)
+                .then(doc => {
+                   doc.forEach(car => {
+                       console.log(newViewItem(car), "FILTERED_LIST")
+                   })
+                })
         } catch (e) {
             res.status(500).json(e)
         }
