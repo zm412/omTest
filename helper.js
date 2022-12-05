@@ -1,7 +1,8 @@
  
 function newViewItem(obj){
+    const year = new Date(obj.year)
     const {brand, model, color, price, isClear, _id} = obj 
-    const newObj = {brand, model, color, price, isClear, _id}
+    const newObj = {brand, model, color, price, isClear, id: _id, year: year.getFullYear()}
     let newView = ''
 
     for(const key in newObj){
@@ -15,15 +16,12 @@ function newViewItem(obj){
 
 function sortField(arr, field, isReverse){
     let result
+
     if(['brand', 'model', 'color'].includes(field)){
         result = arr.sort((a, b) => {
 
-            if(!a[field] || !a[field]){
-                return 0
-            }
-
-            const stringA = a[field].toLowerCase()
-            const stringB = b[field].toLowerCase()
+            const stringA = a[field] ? a[field].toLowerCase() : ''
+            const stringB = b[field]? b[field].toLowerCase() : ''
 
             if(stringA < stringB){
                 return -1
@@ -39,16 +37,16 @@ function sortField(arr, field, isReverse){
 
    if(['year', 'registered'].includes(field)){
        result = arr.sort((a, b) => {
-           const dateA = new Date(a[field]) 
-           const dateB = new Date(b[field])
+           const dateA = a[field] || 0
+           const dateB = b[field] || 0
            return dateA - dateB
        })
    }
     
    if(field == 'price'){
         result = arr.sort((a, b) => {
-           const priceA = a[field] 
-           const priceB = b[field]
+           const priceA = a[field] || 0
+           const priceB = b[field] || 0
            return priceA - priceB 
        })
    }

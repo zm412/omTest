@@ -13,25 +13,30 @@ app.use('/', router)
 
 
 const argumentList = process.argv.slice(2)
+const action = process.argv[2]
+const allActions = ['cars', 'oneCar', 'remove', 'addCar', 'filter', 'sort']
 
-if(argumentList.length > 0){
+if(argumentList.length > 0 && allActions.includes(action)){
+
     const urlLocal = 'http://localhost:3000/'
-    const action = process.argv[2]
     const urlId = action == 'oneCar' ? '/' + process.argv[3] : ''
     const resultUrl = urlLocal + action + urlId
     const params = currentArguments(process.argv.slice(3))
+
     fetch(resultUrl, params[action])
         .then(resp => resp.json())
         .then(doc => {
-            if(action == 'removed'){
+            if(action == 'remove'){
                 console.log(doc, 'doc')
             }
-            if(action == 'cars' || action == 'filter' || action == 'sort'){
+
+            if(['cars', 'filter', 'sort'].includes(action)){
                doc.forEach(( car, index ) => {
                    console.log(newViewItem(car))
                })
             }
-            if(action == 'oneCar' || action == 'addCar'){
+
+            if(['oneCar', 'addCar'].includes(action)){
                console.log(newViewItem(doc))
             }
         })
@@ -45,7 +50,6 @@ async function main() {
 
 main()
 process.on("SIGINT", async() => {
-
     await mongoose.disconnect()
     console.log("Приложение завершило работу")
     process.exit()
