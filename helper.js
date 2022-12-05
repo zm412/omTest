@@ -1,7 +1,7 @@
  
 function newViewItem(obj){
-    const {brand, model, color, price, isClear} = obj 
-    const newObj = {brand, model, color, price, isClear}
+    const {brand, model, color, price, isClear, _id} = obj 
+    const newObj = {brand, model, color, price, isClear, _id}
     let newView = ''
 
     for(const key in newObj){
@@ -59,13 +59,38 @@ function sortField(arr, field, isReverse){
 function currentArguments(argsArr){
     const newCarData = {}
 
-    currentArgs.forEach(param => {
+    argsArr.forEach(( param, index ) => {
         const newParam = param.split('=')
         const [key, value] = newParam
         newCarData[key] = value
     })
 
-    return newCarData
+
+    return {
+        'cars': { method: 'GET' },
+        'oneCar': { method: 'GET' },
+        'addCar': { 
+            method: 'POST', 
+            body: JSON.stringify( newCarData ), 
+            headers: {'Content-Type': 'application/json'}
+        },
+        'remove': { 
+            method: 'DELETE', 
+            body: JSON.stringify({id: argsArr[0]}),
+            headers: {'Content-Type': 'application/json'}
+        },
+        'sort': { 
+            method: 'POST', 
+            body: JSON.stringify( { field: argsArr[0], isReverse: argsArr[1] } ),
+            headers: {'Content-Type': 'application/json'}
+        },
+        'filter': { 
+            method: 'POST', 
+            body: JSON.stringify( newCarData ) ,
+            headers: {'Content-Type': 'application/json'}
+        }
+
+    }
 }
 
-module.exports = {newViewItem, sortField};
+module.exports = {newViewItem, sortField, currentArguments};

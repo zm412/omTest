@@ -4,10 +4,10 @@ const router = new Router()
 const ActionController = require("./ActionController.js")
 
 router.get('/cars', ActionController.getAll)
-router.get('/oneCar', ActionController.getOne)
-router.get('/addCar', ActionController.create)
-router.get('/delete', ActionController.delete)
-router.get('/sort', ActionController.sort)
-router.get('/filter', ActionController.filter)
+router.get('/oneCar/:id', ActionController.getOne)
+router.post('/addCar', ActionController.create)
+router.delete('/remove', ActionController.delete)
+router.post('/sort', ActionController.sort)
+router.post('/filter', ActionController.filter)
 
 module.exports = router;

@@ -15,7 +15,7 @@ class ItemService {
             throw new Error('не указан ID')
         }
         
-        return Car.findById(id);
+        return await Car.findById(id);
     }
 
     async delete(id) {
